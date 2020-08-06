@@ -4,82 +4,63 @@ IMAGE_TAG := $(shell git rev-parse --short HEAD)
 IMAGE_NAME := company/srv
 REGISTRY := change-it.dkr.ecr.us-west-2.amazonaws.com
 
-.PHONY: ci
-ci: deps deps_check lint build test
+.PHONY: grpcgen gqlgen mockgen build run lint test test_integration dockerise deploy run_postgresql run_redis start_deps stop_deps
 
-.PHONY: deps
-deps:
-	GOSUMDB=off GO111MODULE=on GOPROXY=direct go mod download
-	GOSUMDB=off GO111MODULE=on GOPROXY=direct go mod vendor
+ci: mod lint build test dockerise
 
-.PHONY: deps_check
-deps_check:
-	@test -z "$(shell git status -s ./vendor ./Gopkg.*)"
+mod:
+	go mod download
+	go mod vendor
 
-.PHONY: grpcgen
 grpcgen:
 	protoc -I api api/service.proto --go_out=plugins=grpc:api
 
-.PHONY: gqlgen
 gqlgen:
-	cd srvgql && \
+	cd src/srv/srvgql && \
 	rm -f generated.go models/*_gen.go && \
 	go run scripts/gqlgen.go -v
 
-.PHONY: build
 build:
-	go build -o artifacts/svc
+	go build -o artifacts/svc ./cmd/svc/main.go
 
-.PHONY: run
 run:
-	go run ./main.go
+	go run ./cmd/svc/main.go
 
-.PHONY: lint
 lint:
-	golangci-lint run
+	cd ./src && golangci-lint run
 
-.PHONY: test
+mockgen:
+	mockgen -source=src/service/service.go -destination=src/service/mock/deps.go
+	mockgen -source=src/srv/srvhttp/service.go -destination=src/srv/srvhttp/mock/service.go
+	mockgen -source=src/srv/srvgrpc/service.go -destination=src/srv/srvgrpc/mock/service.go
+	mockgen -source=src/srv/srvgql/service.go -destination=src/srv/srvgql/mock/service.go
+
 test:
-	go test -cover -v `go list ./...`
+	go test -cover -v `go list ./src/...`
 
-.PHONY: test_integration
 test_integration:
 	INTEGRATION_TEST=YES go test -cover -v `go list ./...`
 
-.PHONY: dockerise
 dockerise:
-	docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile .
+	docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f ./cmd/svc/Dockerfile .
 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
 
-.PHONY: deploy
 deploy:
 	`AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials AWS_PROFILE=xid aws ecr get-login --region us-west-2 --no-include-email`
 	docker push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
 	#docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY}/${IMAGE_NAME}:latest
 	#docker push ${REGISTRY}/${IMAGE_NAME}:latest
 
-
-.PHONY: mockgen
-mockgen:
-	mockgen -source=service/service.go -destination=service/mock/deps.go
-	mockgen -source=srvhttp/service.go -destination=srvhttp/mock/service.go
-	mockgen -source=srvgrpc/service.go -destination=srvgrpc/mock/service.go
-	mockgen -source=srvgql/service.go -destination=srvgql/mock/service.go
-
-.PHONY: run_postgresql
 run_postgresql:
 	docker run -d --name dummy_postgresql -e POSTGRES_DB=dummy -v ${ROOT_DIR}/tmp/sql/data:/var/lib/postgresql/data -p 5432:5432 postgres:11
 
-.PHONY: run_redis
 run_redis:
 	docker run --name dummy_redis -p 6379:6379 -d redis
 
-.PHONY: start_deps
 start_deps:
 	docker start dummy_redis
 	docker start dummy_postgresql
 
-.PHONY: stop_deps
 stop_deps:
 	docker stop dummy_redis
 	docker stop dummy_postgresql

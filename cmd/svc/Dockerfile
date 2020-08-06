@@ -1,0 +1,51 @@
+# source for ca-bundle so we can do https requests
+FROM amazonlinux:2 as trusted
+
+############################
+# STEP 1 build executable binary
+############################
+FROM golang:1.14 as builder
+
+# kafka
+#ENV LIBRDKAFKA_VERSION 1.0.0
+#
+#RUN apt-get -y update \
+#        && apt-get install -y --no-install-recommends upx-ucl zip libssl-dev \
+#        && apt-get clean \
+#        && rm -rf /var/lib/apt/lists/*
+#
+#
+#RUN curl -Lk -o /root/librdkafka-${LIBRDKAFKA_VERSION}.tar.gz https://github.com/edenhill/librdkafka/archive/v${LIBRDKAFKA_VERSION}.tar.gz && \
+#      tar -xzf /root/librdkafka-${LIBRDKAFKA_VERSION}.tar.gz -C /root && \
+#      cd /root/librdkafka-${LIBRDKAFKA_VERSION} && \
+#      ./configure --prefix /usr && make && make install && make clean && ./configure --clean
+
+# source
+COPY ./go.mod /source/go.mod
+COPY ./src /source/src
+COPY ./cmd/svc /source/
+COPY ./api /source/api
+COPY ./vendor /source/vendor
+COPY ./version /source/
+WORKDIR /source
+
+RUN go env -w GOPROXY=off
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -a -o /bin/svc ./main.go
+
+
+############################
+# STEP 2 build a small image
+############################
+FROM scratch
+
+# Import from builder.
+#COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=trusted /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+
+# Copy our static executable
+COPY --from=builder /bin/svc /svc
+COPY --from=builder /source/version /
+
+# Run the svc binary.
+CMD ["./svc"]
