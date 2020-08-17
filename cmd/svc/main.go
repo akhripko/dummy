@@ -97,9 +97,9 @@ func main() {
 	// build prometheus srv
 	prometheusSrv := prometheus.New(config.PrometheusPort)
 
-	// build healthcheck srv
-	healthSrv := info.New(
-		config.HealthCheckPort,
+	// build info srv
+	infoSrv := info.New(
+		config.InfoPort,
 		storage.Check,
 		cache.Check,
 		prometheusSrv.HealthCheck,
@@ -113,7 +113,7 @@ func main() {
 	http.Run(ctx, wg)
 	grpc.Run(ctx, wg)
 	gql.Run(ctx, wg)
-	healthSrv.Run(ctx, wg)
+	infoSrv.Run(ctx, wg)
 	prometheusSrv.Run(ctx, wg)
 	//helloConsumer.Run(ctx, wg)
 

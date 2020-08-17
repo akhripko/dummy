@@ -20,7 +20,7 @@ func ReadEnv() *Config {
 	viper.SetDefault("GRAPHQL_PORT", 8081)
 	viper.SetDefault("GRPC_PORT", 8090)
 
-	viper.SetDefault("HEALTH_CHECK_PORT", 8888)
+	viper.SetDefault("INFO_PORT", 8888)
 	viper.SetDefault("PROMETHEUS_PORT", 9100)
 
 	viper.SetDefault("HELLO_SRV_TARGET", "localhost:8090")
@@ -52,12 +52,12 @@ func ReadEnv() *Config {
 	viper.SetDefault("KAFKA_CONSUMER_AUTO_OFFSET_RESET", "earliest")
 
 	return &Config{
-		LogLevel:        viper.GetString("LOG_LEVEL"),
-		HTTPPort:        viper.GetInt("HTTP_PORT"),
-		GRPCPort:        viper.GetInt("GRPC_PORT"),
-		GraphqlPort:     viper.GetInt("GRAPHQL_PORT"),
-		HealthCheckPort: viper.GetInt("HEALTH_CHECK_PORT"),
-		PrometheusPort:  viper.GetInt("PROMETHEUS_PORT"),
+		LogLevel:       viper.GetString("LOG_LEVEL"),
+		HTTPPort:       viper.GetInt("HTTP_PORT"),
+		GRPCPort:       viper.GetInt("GRPC_PORT"),
+		GraphqlPort:    viper.GetInt("GRAPHQL_PORT"),
+		InfoPort:       viper.GetInt("INFO_PORT"),
+		PrometheusPort: viper.GetInt("PROMETHEUS_PORT"),
 		Storage: postgres.Config{
 			Host:         viper.GetString("POSTGRES_HOST"),
 			Port:         viper.GetInt("POSTGRES_PORT"),

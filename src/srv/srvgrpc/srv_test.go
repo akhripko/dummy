@@ -14,7 +14,7 @@ func TestService_StatusCheckReadiness(t *testing.T) {
 	var srv Server
 
 	srv.readiness = false
-	assert.Equal(t, "grpc service is't ready yet", srv.HealthCheck().Error())
+	assert.Equal(t, "grpcserver is not ready yet", srv.HealthCheck().Error())
 }
 
 func newClient(ctx context.Context, target string) (api.DummyServiceClient, error) {

@@ -66,7 +66,7 @@ func (s *Server) Run(ctx context.Context, wg *sync.WaitGroup) {
 
 func (s *Server) HealthCheck() error {
 	if !s.readiness {
-		return errors.New("grpc service is not ready yet")
+		return errors.New("grpcserver is not ready yet")
 	}
 	if s.runErr != nil {
 		return errors.New("grpc service: run issue")
