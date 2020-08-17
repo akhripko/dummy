@@ -39,7 +39,7 @@ func main() {
 	var wg = &sync.WaitGroup{}
 
 	// build storage
-	storage, err := postgres.New(ctx, config.SQLDB)
+	storage, err := postgres.New(ctx, config.Storage)
 	if err != nil {
 		log.Error("sql db init error:", err.Error())
 		os.Exit(1)

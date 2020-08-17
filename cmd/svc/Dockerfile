@@ -1,6 +1,3 @@
-# source for ca-bundle so we can do https requests
-FROM amazonlinux:2 as trusted
-
 ############################
 # STEP 1 build executable binary
 ############################
@@ -40,8 +37,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -mod=vendor -a -o /bin/svc ./
 FROM scratch
 
 # Import from builder.
-#COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=trusted /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Copy our static executable
 COPY --from=builder /bin/svc /svc
