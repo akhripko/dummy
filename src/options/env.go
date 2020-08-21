@@ -58,7 +58,7 @@ func ReadEnv() *Config {
 		GraphqlPort:    viper.GetInt("GRAPHQL_PORT"),
 		InfoPort:       viper.GetInt("INFO_PORT"),
 		PrometheusPort: viper.GetInt("PROMETHEUS_PORT"),
-		Storage: postgres.Config{
+		Postgres: postgres.Config{
 			Host:         viper.GetString("POSTGRES_HOST"),
 			Port:         viper.GetInt("POSTGRES_PORT"),
 			User:         viper.GetString("POSTGRES_USER"),

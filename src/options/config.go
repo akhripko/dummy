@@ -14,7 +14,7 @@ type Config struct {
 	GRPCPort       int
 	InfoPort       int
 	PrometheusPort int
-	Storage        postgres.Config
+	Postgres       postgres.Config
 	CacheAddr      string
 	HelloSrvConf   hellosrv.Config
 	//KafkaTopic      KafkaTopic

@@ -10,7 +10,7 @@ import (
 	reflect "reflect"
 )
 
-// MockStorage is a mock of Storage interface
+// MockStorage is a mock of Postgres interface
 type MockStorage struct {
 	ctrl     *gomock.Controller
 	recorder *MockStorageMockRecorder
