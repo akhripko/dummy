@@ -10,7 +10,8 @@ import (
 )
 
 type Storage struct {
-	db *sql.DB
+	db     *sql.DB
+	dbName string
 }
 
 type Config struct {

@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/akhripko/dummy/src/cache/redis"
 	"github.com/akhripko/dummy/src/metrics"
@@ -108,6 +109,14 @@ func main() {
 		grpc.HealthCheck,
 		//helloConsumer.HealthCheck,
 	)
+
+	time.Sleep(2 * time.Second)
+	// make storage migration
+	err = storage.MakeMigration()
+	if err != nil {
+		log.Error("storage migration failed: ", err.Error())
+		os.Exit(2)
+	}
 
 	// run server
 	http.Run(ctx, wg)

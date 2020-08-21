@@ -29,7 +29,7 @@ func ReadEnv() *Config {
 	viper.SetDefault("POSTGRES_PORT", 5432)
 	viper.SetDefault("POSTGRES_USER", "postgres")
 	viper.SetDefault("POSTGRES_PASS", "")
-	viper.SetDefault("POSTGRES_DB_NAME", "db")
+	viper.SetDefault("POSTGRES_DB_NAME", "dummy")
 	viper.SetDefault("POSTGRES_MAX_OPEN_CONNS", 10)
 
 	viper.SetDefault("CACHE_ADDR", ":6379")

@@ -40,8 +40,9 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Copy our static executable
-COPY --from=builder /bin/svc /svc
+COPY --from=builder /source/src/storage/postgres/migrations /src/storage/postgres/migrations
 COPY --from=builder /source/version /
+COPY --from=builder /bin/svc /svc
 
 # Run the svc binary.
 CMD ["./svc"]
