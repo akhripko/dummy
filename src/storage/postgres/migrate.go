@@ -17,7 +17,7 @@ func (s *Storage) MakeMigration() error {
 		return err
 	}
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://./src/storage/postgres/migrations",
+		"file://./migrations",
 		s.dbName, driver)
 	if err != nil {
 		return err

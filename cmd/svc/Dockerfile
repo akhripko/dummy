@@ -24,6 +24,7 @@ COPY ./cmd/svc /source/
 COPY ./api /source/api
 COPY ./vendor /source/vendor
 COPY ./version /source/
+COPY ./migrations /source/migrations
 WORKDIR /source
 
 RUN go env -w GOPROXY=off
@@ -40,7 +41,7 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Copy our static executable
-COPY --from=builder /source/src/storage/postgres/migrations /src/storage/postgres/migrations
+COPY --from=builder /source/migrations /migrations
 COPY --from=builder /source/version /
 COPY --from=builder /bin/svc /svc
 
