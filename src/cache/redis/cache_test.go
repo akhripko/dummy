@@ -33,7 +33,7 @@ func TestCache_ReadWrite(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Empty(t, data)
 
-	err = c.WriteTTL(key, value, 2)
+	err = c.WriteWithTTL(key, value, 2)
 	assert.NoError(t, err)
 
 	data, err = c.Read(key)

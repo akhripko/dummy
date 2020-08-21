@@ -34,9 +34,9 @@ func TestService_Hello(t *testing.T) {
 	cache := mock.NewMockCache(c)
 	cache.EXPECT().Read("key").DoAndReturn(func(key string) (string, error) { return "Hello, key", nil }).Times(1)
 	cache.EXPECT().Read("key2").DoAndReturn(func(key string) (string, error) { return "", nil }).Times(1)
-	cache.EXPECT().WriteTTL("key2", "Hello, key2", 300).DoAndReturn(func(key, value string, ttl int) error { return nil }).Times(1)
+	cache.EXPECT().WriteWithTTL("key2", "Hello, key2", 300).DoAndReturn(func(key, value string, ttl int) error { return nil }).Times(1)
 	cache.EXPECT().Read("key3").DoAndReturn(func(key string) (string, error) { return "", errors.New("some error") }).Times(1)
-	cache.EXPECT().WriteTTL("key3", "Hello, key3", 300).DoAndReturn(func(key, value string, ttl int) error { return nil }).Times(1)
+	cache.EXPECT().WriteWithTTL("key3", "Hello, key3", 300).DoAndReturn(func(key, value string, ttl int) error { return nil }).Times(1)
 	cache.EXPECT().Read("key4").DoAndReturn(func(key string) (string, error) { return "", nil }).Times(1)
 
 	tests := []struct {

@@ -11,8 +11,8 @@ type Storage interface {
 
 type Cache interface {
 	Check() error
-	Read(name string) (string, error)
-	WriteTTL(name, msg string, ttl int) error
+	Read(key string) (string, error)
+	WriteWithTTL(key, value string, ttl int) error
 }
 
 func New(storage Storage, cache Cache) (*Service, error) {

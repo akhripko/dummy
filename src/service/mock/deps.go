@@ -100,30 +100,30 @@ func (mr *MockCacheMockRecorder) Check() *gomock.Call {
 }
 
 // Read mocks base method
-func (m *MockCache) Read(name string) (string, error) {
+func (m *MockCache) Read(key string) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Read", name)
+	ret := m.ctrl.Call(m, "Read", key)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Read indicates an expected call of Read
-func (mr *MockCacheMockRecorder) Read(name interface{}) *gomock.Call {
+func (mr *MockCacheMockRecorder) Read(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockCache)(nil).Read), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Read", reflect.TypeOf((*MockCache)(nil).Read), key)
 }
 
-// WriteTTL mocks base method
-func (m *MockCache) WriteTTL(name, msg string, ttl int) error {
+// WriteWithTTL mocks base method
+func (m *MockCache) WriteWithTTL(key, value string, ttl int) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "WriteTTL", name, msg, ttl)
+	ret := m.ctrl.Call(m, "WriteWithTTL", key, value, ttl)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// WriteTTL indicates an expected call of WriteTTL
-func (mr *MockCacheMockRecorder) WriteTTL(name, msg, ttl interface{}) *gomock.Call {
+// WriteWithTTL indicates an expected call of WriteWithTTL
+func (mr *MockCacheMockRecorder) WriteWithTTL(key, value, ttl interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteTTL", reflect.TypeOf((*MockCache)(nil).WriteTTL), name, msg, ttl)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteWithTTL", reflect.TypeOf((*MockCache)(nil).WriteWithTTL), key, value, ttl)
 }

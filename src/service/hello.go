@@ -27,7 +27,7 @@ func (s *Service) Hello(name string) (*models.HelloMessage, error) {
 	}
 
 	// cache data
-	err = s.cache.WriteTTL(name, msgModel.Message, 300)
+	err = s.cache.WriteWithTTL(name, msgModel.Message, 300)
 	if err != nil {
 		log.Error("cache err:" + err.Error())
 	}
