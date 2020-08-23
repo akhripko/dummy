@@ -46,7 +46,7 @@ func main() {
 		os.Exit(1)
 	}
 	// build cache
-	cache, err := redis.New(ctx, config.CacheAddr)
+	cache, err := redis.New(ctx, config.Redis)
 	if err != nil {
 		log.Error("cache init error:", err.Error())
 		os.Exit(1)

@@ -3,6 +3,9 @@ package options
 import (
 	//"github.com/akhripko/dummy/src/kafka/consumer"
 	//"github.com/akhripko/dummy/src/kafka/producer"
+	"time"
+
+	"github.com/akhripko/dummy/src/cache/redis"
 	"github.com/akhripko/dummy/src/providers/grpc/hellosrv"
 	"github.com/akhripko/dummy/src/storage/postgres"
 
@@ -33,6 +36,10 @@ func ReadEnv() *Config {
 	viper.SetDefault("POSTGRES_MAX_OPEN_CONNS", 10)
 
 	viper.SetDefault("CACHE_ADDR", ":6379")
+	viper.SetDefault("CACHE_STATS_LOG_INTERVAL", time.Minute)
+	viper.SetDefault("CACHE_MAX_IDLE_CONNECTION_TIMEOUT", time.Hour)
+	viper.SetDefault("CACHE_MAX_ACTIVE_CONNECTIONS", 500)
+	viper.SetDefault("CACHE_MAX_IDLE_CONNECTIONS", 100)
 
 	viper.SetDefault("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
 	viper.SetDefault("KAFKA_SSL_ENABLED", false)
@@ -66,7 +73,13 @@ func ReadEnv() *Config {
 			DBName:       viper.GetString("POSTGRES_DB_NAME"),
 			MaxOpenConns: viper.GetInt("POSTGRES_MAX_OPEN_CONNS"),
 		},
-		CacheAddr:    viper.GetString("CACHE_ADDR"),
+		Redis: redis.Config{
+			Addr:               viper.GetString("CACHE_ADDR"),
+			StatsWriteInterval: viper.GetDuration("CACHE_STATS_LOG_INTERVAL"),
+			IdleTimeout:        viper.GetDuration("CACHE_MAX_IDLE_CONNECTION_TIMEOUT"),
+			MaxActive:          viper.GetInt("CACHE_MAX_ACTIVE_CONNECTIONS"),
+			MaxIdle:            viper.GetInt("CACHE_MAX_IDLE_CONNECTIONS"),
+		},
 		HelloSrvConf: hellosrv.Config{Target: viper.GetString("HELLO_SRV_TARGET")},
 		//KafkaTopic:   KafkaTopic{Hello: viper.GetString("KAFKA_TOPIC_TEST")},
 		//KafkaProducer: producer.Config{

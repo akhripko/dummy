@@ -14,7 +14,13 @@ func TestCache_Check(t *testing.T) {
 		t.Skip()
 	}
 
-	c, err := New(context.Background(), ":6379")
+	c, err := New(context.Background(), Config{
+		Addr:               ":6379",
+		StatsWriteInterval: time.Minute,
+		IdleTimeout:        10 * time.Minute,
+		MaxActive:          10,
+		MaxIdle:            10,
+	})
 	assert.NoError(t, err)
 	assert.NoError(t, c.Check())
 }
@@ -24,7 +30,13 @@ func TestCache_ReadWrite(t *testing.T) {
 		t.Skip()
 	}
 
-	c, err := New(context.Background(), ":6379")
+	c, err := New(context.Background(), Config{
+		Addr:               ":6379",
+		StatsWriteInterval: time.Minute,
+		IdleTimeout:        10 * time.Minute,
+		MaxActive:          10,
+		MaxIdle:            10,
+	})
 	assert.NoError(t, err)
 
 	key := "key" + time.Now().Format(time.RFC3339Nano)
@@ -33,7 +45,7 @@ func TestCache_ReadWrite(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Empty(t, data)
 
-	err = c.WriteWithTTL(key, value, 2)
+	err = c.Write(key, value)
 	assert.NoError(t, err)
 
 	data, err = c.Read(key)
