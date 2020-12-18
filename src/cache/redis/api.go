@@ -75,6 +75,13 @@ func (c *Cache) EXPIRE(key string, seconds int) error {
 	return err
 }
 
+func (c *Cache) Exists(key string) (bool, error) {
+	r := c.pool.Get()
+	defer r.Close()
+
+	return redis.Bool(r.Do("EXISTS", key))
+}
+
 func (c *Cache) ReadSet(key string) ([]string, error) {
 	r := c.pool.Get()
 	defer r.Close()
@@ -98,6 +105,13 @@ func (c *Cache) AddItemToSet(key string, value string) error {
 		return err
 	}
 	return nil
+}
+
+func (c *Cache) IsItemInSet(key string, value string) (bool, error) {
+	r := c.pool.Get()
+	defer r.Close()
+
+	return redis.Bool(r.Do("SISMEMBER", key, value))
 }
 
 func (c *Cache) RemoveItemFromSet(key string, value string) error {

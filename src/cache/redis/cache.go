@@ -25,7 +25,7 @@ type Config struct {
 	MaxIdle            int
 }
 
-/// New returns the initialized Redis object
+// New returns the initialized Redis object
 func New(ctx context.Context, cfg Config) (*Cache, error) {
 	log.Info("Redis init: host=", cfg.Addr)
 	c := new(Cache)
@@ -44,6 +44,7 @@ func New(ctx context.Context, cfg Config) (*Cache, error) {
 					return
 				}
 				log.Debug("close redis connection")
+				return
 			case <-t.C:
 				currStats := c.pool.Stats()
 				log.Infof(
