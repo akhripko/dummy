@@ -15,6 +15,8 @@ https://github.com/confluentinc/confluent-kafka-go
 
 brew install librdkafka pkg-config
 
+https://www.magalix.com/blog/kafka-on-kubernetes-and-deploying-best-practice
+
 #git:mod
 git config --global url."git@github.com:".insteadOf "https://github.com/"
 

@@ -16,7 +16,7 @@ type Config struct {
 	BootstrapServers string
 	GroupID          string
 	SessionTimeoutMs string
-	AutoOffsetReset  string
+	AutoOffsetReset  string // earliest, latest
 	SSL              SSLConfig
 }
 

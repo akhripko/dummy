@@ -45,6 +45,10 @@ dockerise:
 	docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f ./cmd/svc/Dockerfile .
 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
 
+dockerise_kafka_consumer:
+	docker build -t kafka_consumer:${IMAGE_TAG} -f ./cmd/kafka-consumer/Dockerfile .
+	docker tag kafka_consumer:${IMAGE_TAG} ${REGISTRY}/kafka_consumer:${IMAGE_TAG}
+
 deploy:
 	`AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials AWS_PROFILE=xid aws ecr get-login --region us-west-2 --no-include-email`
 	docker push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}

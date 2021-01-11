@@ -2,10 +2,11 @@ package producer
 
 import (
 	"context"
+	"sync"
+
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
-	"sync"
 )
 
 type Config struct {

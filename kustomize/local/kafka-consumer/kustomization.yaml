@@ -1,0 +1,11 @@
+---
+resources:
+  - deployment.yaml
+
+configMapGenerator:
+  - name: kafka-consumer.env
+    behavior: create
+    files:
+      - app.env
+generatorOptions:
+  disableNameSuffixHash: true
