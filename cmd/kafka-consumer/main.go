@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/akhripko/dummy/src/kafka/consumer"
 	options "github.com/akhripko/dummy/src/options/kafka"
@@ -23,13 +24,16 @@ func main() {
 	initLogger(config)
 
 	log.Info("begin...")
+	log.Debugf("config: %+v\n", *config)
 
 	// prepare main context
 	ctx, cancel := context.WithCancel(context.Background())
 	setupGracefulShutdown(cancel)
 	var wg = &sync.WaitGroup{}
 
-	client, err := consumer.New(config.Consumer, []string{config.TopicName}, nil)
+	handler := &Handler{}
+
+	client, err := consumer.New(config.Consumer, []string{config.TopicName}, handler)
 	if err != nil {
 		log.Error("kafka consumer init error:", err.Error())
 		os.Exit(1)
@@ -50,7 +54,7 @@ func main() {
 	log.Info("end")
 }
 
-func initLogger(config *options.KafkaConsumerConfig) {
+func initLogger(config *options.ConsumerConfig) {
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stderr)
 
@@ -72,4 +76,12 @@ func setupGracefulShutdown(stop func()) {
 		log.Info("got Interrupt signal")
 		stop()
 	}()
+}
+
+type Handler struct {
+}
+
+func (h *Handler) Handle(ctx context.Context, key, value []byte, timestamp time.Time) error {
+	log.Printf("key:%s, value:%s", string(key), string(value))
+	return nil
 }

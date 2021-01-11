@@ -46,8 +46,11 @@ dockerise:
 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
 
 dockerise_kafka_consumer:
-	docker build -t kafka_consumer:${IMAGE_TAG} -f ./cmd/kafka-consumer/Dockerfile .
-	docker tag kafka_consumer:${IMAGE_TAG} ${REGISTRY}/kafka_consumer:${IMAGE_TAG}
+	docker build -t kafka_consumer:v0.0.1 -f ./cmd/kafka-consumer/Dockerfile .
+	#docker tag kafka_consumer:${IMAGE_TAG} ${REGISTRY}/kafka_consumer:${IMAGE_TAG}
+
+apply_kafka_consumer:
+	kustomize build ./kustomize/local/kafka-consumer | kubectl apply -f -
 
 deploy:
 	`AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials AWS_PROFILE=xid aws ecr get-login --region us-west-2 --no-include-email`

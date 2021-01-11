@@ -18,24 +18,18 @@ RUN curl -Lk -o /root/librdkafka-${LIBRDKAFKA_VERSION}.tar.gz https://github.com
       ./configure --prefix /usr && make && make install && make clean && ./configure --clean
 
 # source
-COPY ./go.mod /source/go.mod
-COPY ./src /source/src
-COPY ./cmd/svc /source/
-COPY ./api /source/api
-COPY ./vendor /source/vendor
-COPY ./version /source/
-COPY ./migrations /source/migrations
+COPY . /source/
 WORKDIR /source
 
 RUN go env -w GOPROXY=off
 
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -mod=vendor -a -o /bin/svc ./main.go
+RUN GOOS=linux GOARCH=amd64 go build -mod=vendor -tags static_all -a -o /bin/svc ./cmd/kafka-consumer/main.go
 
 
 ############################
 # STEP 2 build a small image
 ############################
-FROM confluentinc/cp-kafka-connect
+FROM scratch
 
 # Import from builder.
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
@@ -45,4 +39,4 @@ COPY --from=builder /source/version /
 COPY --from=builder /bin/svc /svc
 
 # Run the svc binary.
-CMD ["./svc"]
+CMD ["/svc"]

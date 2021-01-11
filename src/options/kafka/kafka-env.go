@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func ReadKafkaConsumerEnv() *KafkaConsumerConfig {
+func ReadKafkaConsumerEnv() *ConsumerConfig {
 	viper.AutomaticEnv()
 
 	viper.SetEnvPrefix("APP")
@@ -15,7 +15,7 @@ func ReadKafkaConsumerEnv() *KafkaConsumerConfig {
 	viper.SetDefault("LOG_LEVEL", "DEBUG")
 	viper.SetDefault("INFO_PORT", 8888)
 
-	return &KafkaConsumerConfig{
+	return &ConsumerConfig{
 		LogLevel:  viper.GetString("LOG_LEVEL"),
 		InfoPort:  viper.GetInt("INFO_PORT"),
 		TopicName: viper.GetString("KAFKA_TOPIC_NAME"),
@@ -36,7 +36,7 @@ func ReadKafkaConsumerEnv() *KafkaConsumerConfig {
 	}
 }
 
-func ReadKafkaProducerEnv() *KafkaProducerConfig {
+func ReadKafkaProducerEnv() *ProducerConfig {
 	viper.AutomaticEnv()
 
 	viper.SetEnvPrefix("APP")
@@ -44,7 +44,7 @@ func ReadKafkaProducerEnv() *KafkaProducerConfig {
 	viper.SetDefault("LOG_LEVEL", "DEBUG")
 	viper.SetDefault("INFO_PORT", 8888)
 
-	return &KafkaProducerConfig{
+	return &ProducerConfig{
 		LogLevel:  viper.GetString("LOG_LEVEL"),
 		InfoPort:  viper.GetInt("INFO_PORT"),
 		TopicName: viper.GetString("KAFKA_TOPIC_NAME"),

@@ -5,14 +5,14 @@ import (
 	"github.com/akhripko/dummy/src/kafka/producer"
 )
 
-type KafkaConsumerConfig struct {
+type ConsumerConfig struct {
 	LogLevel  string
 	InfoPort  int
 	TopicName string
 	Consumer  consumer.Config
 }
 
-type KafkaProducerConfig struct {
+type ProducerConfig struct {
 	LogLevel  string
 	InfoPort  int
 	TopicName string

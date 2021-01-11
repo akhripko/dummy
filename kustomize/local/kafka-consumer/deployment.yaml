@@ -18,13 +18,14 @@ spec:
     metadata:
       labels:
         app: kafka-consumer
+        v: v1
     spec:
       containers:
         - name: consumer
           envFrom:
             - configMapRef:
                 name: kafka-consumer.env
-          image: "kafka_consumer:a6f2505"
+          image: "kafka_consumer:v0.0.1"
 #          imagePullPolicy: Always
           ports:
             - name: health
