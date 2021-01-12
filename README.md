@@ -37,3 +37,5 @@ $ go get github.com/99designs/gqlgen
 
 #dev tool
 brew install kustomize
+
+kafka-topics --describe --topic quickstart-events --bootstrap-server localhost:9092

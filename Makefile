@@ -5,6 +5,7 @@ ROOT_DIR := $(shell pwd)
 IMAGE_TAG := v0.0.2
 IMAGE_NAME := company/srv
 REGISTRY := change-it.dkr.ecr.us-west-2.amazonaws.com
+KAFKA_REGISTER_FOR_KEY=ec059ac5-e303-4232-999e-39abc592fe75
 
 .PHONY: grpcgen gqlgen mockgen build run lint test test_integration dockerise deploy run_postgresql run_redis start_deps stop_deps
 
@@ -90,6 +91,18 @@ start_deps:
 stop_deps:
 	docker stop dummy_redis
 	docker stop dummy_postgresql
+
+run_kafka:
+	docker run --name kafka -e ADV_HOST=127.0.0.1 \
+           -e EULA="https://dl.lenses.io/d/?id=${KAFKA_REGISTER_FOR_KEY}" \
+           --rm -p 3030:3030 -p 9092:9092 -p 8081:8081 -p 8082:8082 -p 8083:8083 -p 3031:3031 -p 2181:2181 -d lensesio/box:latest
+
+start_kafka:
+	docker start kafka
+
+stop_kafka:
+	docker stop kafka
+
 
 #.PHONY: exec_redis_sh
 #exec_redis_sh:

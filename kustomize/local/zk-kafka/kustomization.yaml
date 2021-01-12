@@ -1,5 +1,5 @@
 ---
 resources:
-  - zookeeper.yaml
+#  - zookeeper.yaml
   - kafka.yaml
 

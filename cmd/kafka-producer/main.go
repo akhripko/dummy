@@ -85,7 +85,7 @@ func generateData(ctx context.Context, client *producer.Producer) {
 		case <-ctx.Done():
 			log.Debug("stop generation: canceled context")
 			return
-		case <-time.After(time.Second):
+		case <-time.After(10*time.Second):
 			n++
 			key := time.Now().UTC().Format(time.RFC3339)
 			data := fmt.Sprintf("recNo:%d time:%s", n, time.Now().UTC().Format(time.RFC3339))

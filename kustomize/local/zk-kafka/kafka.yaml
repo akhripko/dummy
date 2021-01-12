@@ -9,6 +9,12 @@ spec:
     - port: 9092
       name: kafka-port
       protocol: TCP
+    - port: 8081
+      name: kafka-regestry-port
+      protocol: TCP
+    - port: 3030
+      name: kafka-ui-port
+      protocol: TCP
   selector:
     app: kafka
     id: "0"
@@ -17,7 +23,7 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: kafka-broker0
+  name: kafka
 spec:
   replicas: 1
   selector:
@@ -32,21 +38,17 @@ spec:
     spec:
       containers:
         - name: kafka
-          image: wurstmeister/kafka
+          image: lensesio/box:latest
           ports:
             - containerPort: 9092
+            - containerPort: 3030
+            - containerPort: 3131
+            - containerPort: 2181
+            - containerPort: 8081
+            - containerPort: 8082
+            - containerPort: 8083
           env:
-            - name: KAFKA_ADVERTISED_PORT
-              value: "30718"
-            - name: KAFKA_ADVERTISED_HOST_NAME
-              value: 192.168.1.240
-            - name: KAFKA_ZOOKEEPER_CONNECT
-              value: zk:2181
-            - name: KAFKA_BROKER_ID
-              value: "0"
-            - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
-              value: "true"
-            - name: KAFKA_CREATE_TOPICS
-              value: "topic1"
-            - name: LOG4J_LOGGER_KAFKA_AUTHORIZER_LOGGER
-              value: "DEBUG"
+            - name: EULA
+              value: "https://dl.lenses.io/d/?id=ec059ac5-e303-4232-999e-39abc592fe75"
+            - name: ADV_HOST
+              value: "kafka-service"

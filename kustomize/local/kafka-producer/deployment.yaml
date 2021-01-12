@@ -18,7 +18,7 @@ spec:
     metadata:
       labels:
         app: kafka-producer
-        v: v6
+        v: v1
     spec:
       containers:
         - name: producer

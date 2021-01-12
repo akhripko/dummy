@@ -82,6 +82,6 @@ type Handler struct {
 }
 
 func (h *Handler) Handle(ctx context.Context, key, value []byte, timestamp time.Time) error {
-	log.Printf("key:%s, value:%s", string(key), string(value))
+	log.Printf(">>>>>data: key:%s, value:%s", string(key), string(value))
 	return nil
 }
