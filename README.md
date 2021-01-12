@@ -34,3 +34,6 @@ $ cd gqlgen-todos
 $ go mod init github.com/[username]/gqlgen-todos
 
 $ go get github.com/99designs/gqlgen
+
+#dev tool
+brew install kustomize

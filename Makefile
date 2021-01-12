@@ -1,6 +1,7 @@
 SHELL=/bin/bash
 ROOT_DIR := $(shell pwd)
-IMAGE_TAG := $(shell git rev-parse --short HEAD)
+#IMAGE_TAG := $(shell git rev-parse --short HEAD)
+IMAGE_TAG := $(git describe --abbrev=0 --tags)
 IMAGE_NAME := company/srv
 REGISTRY := change-it.dkr.ecr.us-west-2.amazonaws.com
 
@@ -46,14 +47,19 @@ dockerise:
 	docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
 
 dockerise_kafka_consumer:
-	docker build -t kafka_consumer:v0.0.1 -f ./cmd/kafka-consumer/Dockerfile .
+	docker build -t kafka_consumer:${IMAGE_TAG} -f ./cmd/kafka-consumer/Dockerfile .
 	#docker tag kafka_consumer:${IMAGE_TAG} ${REGISTRY}/kafka_consumer:${IMAGE_TAG}
 
 apply_kafka_consumer:
+	(cd ./kustomize/local/kafka-consumer && kustomize edit set image kafka-consumer=kafka_consumer:${IMAGE_TAG})
+	#kustomize build ./kustomize/local/kafka-consumer
 	kustomize build ./kustomize/local/kafka-consumer | kubectl apply -f -
 
-deploy:
-	`AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials AWS_PROFILE=xid aws ecr get-login --region us-west-2 --no-include-email`
+push_image:
+	# for aws-cli v1.*
+	#`AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials AWS_PROFILE=xid aws ecr get-login --region us-west-2 --no-include-email`
+	# for aws-cli v2.*
+	aws --profile xid --region us-west-2 ecr get-login-password | docker login --username AWS --password-stdin https://${REGISTRY}
 	docker push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
 	#docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY}/${IMAGE_NAME}:latest
 	#docker push ${REGISTRY}/${IMAGE_NAME}:latest

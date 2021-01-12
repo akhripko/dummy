@@ -1,11 +1,16 @@
----
 resources:
-  - deployment.yaml
+- deployment.yaml
 
 configMapGenerator:
-  - name: kafka-consumer.env
-    behavior: create
-    envs:
-      - app.env
-    options:
-      disableNameSuffixHash: true
+- behavior: create
+  envs:
+  - app.env
+  name: kafka-consumer.env
+  options:
+    disableNameSuffixHash: true
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: kafka-consumer
+  newName: kafka_consumer
+  newTag: v0.0.1

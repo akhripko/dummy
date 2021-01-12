@@ -25,7 +25,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: kafka-consumer.env
-          image: "kafka_consumer:v0.0.1"
+          image: kafka-consumer
 #          imagePullPolicy: Always
           ports:
             - name: health
