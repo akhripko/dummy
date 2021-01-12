@@ -18,8 +18,12 @@ spec:
     metadata:
       labels:
         app: kafka-consumer
-        v: v1
+        v: v11111
     spec:
+      hostAliases:
+        - ip: "10.106.24.250"
+          hostnames:
+            - "kafka-service"
       containers:
         - name: consumer
           envFrom:

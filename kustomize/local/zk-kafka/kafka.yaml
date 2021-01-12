@@ -35,6 +35,7 @@ spec:
       labels:
         app: kafka
         id: "0"
+        v: v0
     spec:
       containers:
         - name: kafka
@@ -51,4 +52,4 @@ spec:
             - name: EULA
               value: "https://dl.lenses.io/d/?id=ec059ac5-e303-4232-999e-39abc592fe75"
             - name: ADV_HOST
-              value: "kafka-service"
+              value: "10.106.24.250"

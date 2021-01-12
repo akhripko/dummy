@@ -18,8 +18,12 @@ spec:
     metadata:
       labels:
         app: kafka-producer
-        v: v1
+        v: v111111
     spec:
+      hostAliases:
+        - ip: "10.106.24.250"
+          hostnames:
+            - "kafka-service"
       containers:
         - name: producer
           envFrom:

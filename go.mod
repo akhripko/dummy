@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/99designs/gqlgen v0.10.2
-	github.com/confluentinc/confluent-kafka-go v1.0.0
+	github.com/confluentinc/confluent-kafka-go v1.5.2
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.12.2
 	github.com/golang/mock v1.4.3

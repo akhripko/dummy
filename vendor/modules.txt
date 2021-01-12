@@ -19,8 +19,9 @@ github.com/99designs/gqlgen/plugin/servergen
 github.com/agnivade/levenshtein
 # github.com/beorn7/perks v1.0.0
 github.com/beorn7/perks/quantile
-# github.com/confluentinc/confluent-kafka-go v1.0.0
+# github.com/confluentinc/confluent-kafka-go v1.5.2
 github.com/confluentinc/confluent-kafka-go/kafka
+github.com/confluentinc/confluent-kafka-go/kafka/librdkafka
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible

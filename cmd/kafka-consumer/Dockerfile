@@ -1,10 +1,10 @@
 ############################
 # STEP 1 build executable binary
 ############################
-FROM golang:1.14 as builder
+FROM golang:1.15 as builder
 
 # kafka
-ENV LIBRDKAFKA_VERSION 1.0.0
+ENV LIBRDKAFKA_VERSION 1.3.0
 
 RUN apt-get -y update \
         && apt-get install -y --no-install-recommends upx-ucl zip libssl-dev \
@@ -23,7 +23,8 @@ WORKDIR /source
 
 RUN go env -w GOPROXY=off
 
-RUN GOOS=linux GOARCH=amd64 go build -mod=vendor -tags static_all -a -o /bin/svc ./cmd/kafka-consumer/main.go
+#RUN GOOS=linux GOARCH=amd64 go build -mod=vendor -tags static_all -a -o /bin/svc ./cmd/kafka-consumer/main.go
+RUN GOOS=linux GOARCH=amd64 go build -mod=vendor --ldflags '-extldflags "-static"' -a -o /bin/svc ./cmd/kafka-consumer/main.go
 
 
 ############################
