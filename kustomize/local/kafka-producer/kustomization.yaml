@@ -5,13 +5,13 @@ configMapGenerator:
 - behavior: create
   envs:
   - app.env
-  name: kafka-consumer.env
+  name: kafka-producer.env
   options:
     disableNameSuffixHash: true
 
 images:
-- name: kafka-consumer
-  newName: kafka_consumer
+- name: kafka-producer
+  newName: kafka_producer
   newTag: v0.0.2
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

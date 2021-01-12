@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-consumer
+  name: kafka-producer
   labels:
-    app: kafka-consumer
+    app: kafka-producer
 spec:
   selector:
     matchLabels:
-      app: kafka-consumer
+      app: kafka-producer
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -17,15 +17,15 @@ spec:
   template:
     metadata:
       labels:
-        app: kafka-consumer
+        app: kafka-producer
         v: v6
     spec:
       containers:
-        - name: consumer
+        - name: producer
           envFrom:
             - configMapRef:
-                name: kafka-consumer.env
-          image: kafka-consumer
+                name: kafka-producer.env
+          image: kafka-producer
 #          imagePullPolicy: Always
           ports:
             - name: health

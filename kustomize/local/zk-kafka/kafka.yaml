@@ -19,7 +19,7 @@ apiVersion: apps/v1
 metadata:
   name: kafka-broker0
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: kafka
@@ -44,5 +44,9 @@ spec:
               value: zk:2181
             - name: KAFKA_BROKER_ID
               value: "0"
+            - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+              value: "true"
             - name: KAFKA_CREATE_TOPICS
-              value: admintome-test:1:1
+              value: "topic1"
+            - name: LOG4J_LOGGER_KAFKA_AUTHORIZER_LOGGER
+              value: "DEBUG"

@@ -1,7 +1,8 @@
 SHELL=/bin/bash
 ROOT_DIR := $(shell pwd)
 #IMAGE_TAG := $(shell git rev-parse --short HEAD)
-IMAGE_TAG := $(git describe --abbrev=0 --tags)
+#IMAGE_TAG := $(git describe --abbrev=0 --tags)
+IMAGE_TAG := v0.0.2
 IMAGE_NAME := company/srv
 REGISTRY := change-it.dkr.ecr.us-west-2.amazonaws.com
 
@@ -54,6 +55,18 @@ apply_kafka_consumer:
 	(cd ./kustomize/local/kafka-consumer && kustomize edit set image kafka-consumer=kafka_consumer:${IMAGE_TAG})
 	#kustomize build ./kustomize/local/kafka-consumer
 	kustomize build ./kustomize/local/kafka-consumer | kubectl apply -f -
+
+dockerise_kafka_producer:
+	docker build -t kafka_producer:${IMAGE_TAG} -f ./cmd/kafka-producer/Dockerfile .
+	#docker tag kafka_producer:${IMAGE_TAG} ${REGISTRY}/kafka_producer:${IMAGE_TAG}
+
+apply_kafka_producer:
+	(cd ./kustomize/local/kafka-producer && kustomize edit set image kafka-producer=kafka_producer:${IMAGE_TAG})
+	#kustomize build ./kustomize/local/kafka-producer
+	kustomize build ./kustomize/local/kafka-producer | kubectl apply -f -
+
+apply_kafka:
+	kustomize build ./kustomize/local/zk-kafka | kubectl apply -f -
 
 push_image:
 	# for aws-cli v1.*
