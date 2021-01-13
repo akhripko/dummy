@@ -4,7 +4,7 @@
 FROM golang:1.15 as builder
 
 # kafka
-ENV LIBRDKAFKA_VERSION 1.3.0
+ENV LIBRDKAFKA_VERSION 1.5.3
 
 RUN apt-get -y update \
         && apt-get install -y --no-install-recommends upx-ucl zip libssl-dev \
@@ -23,21 +23,6 @@ WORKDIR /source
 
 RUN go env -w GOPROXY=off
 
-#RUN GOOS=linux GOARCH=amd64 go build -mod=vendor -tags static_all -a -o /bin/svc ./cmd/kafka-producer/main.go
-RUN GOOS=linux GOARCH=amd64 go build -mod=vendor --ldflags '-extldflags "-static"' -a -o /bin/svc ./cmd/kafka-producer/main.go
+RUN GOOS=linux GOARCH=amd64 go build -mod=vendor -tags dynamic -a -o /bin/svc ./cmd/kafka-producer/main.go
 
-
-############################
-# STEP 2 build a small image
-############################
-FROM scratch
-
-# Import from builder.
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-
-# Copy our static executable
-COPY --from=builder /source/version /
-COPY --from=builder /bin/svc /svc
-
-# Run the svc binary.
-CMD ["/svc"]
+CMD ["/bin/svc"]

@@ -1,0 +1,72 @@
+version: '3.5'
+
+services:
+  #  kafka:
+  #    image: lensesio/fast-data-dev:latest
+  #    environment:
+  #      - KAFKA_DELETE_TOPIC_ENABLE=true
+  #    ports:
+  #      - 2181:2181
+  #      - 3030:3030
+  #      - 8081-8083:8081-8083
+  #      - 9581-9585:9581-9585
+  #      - 9092:9092
+
+  lenses:
+    image: lensesio/box
+    environment:
+      - EULA=https://dl.lenses.io/d/?id=ec059ac5-e303-4232-999e-39abc592fe75
+    ports:
+      - 3030:3030
+      - 8081:8081
+      - 9092:9092
+    networks:
+      - joiner_net
+
+  consumer:
+#    build: svc
+    image: kafka_consumer:v0.0.1
+    restart: always
+    depends_on:
+      - lenses
+    links:
+      - lenses
+    environment:
+      - APP_LOG_LEVEL=DEBUG
+      - APP_INFO_PORT=8888
+      - APP_KAFKA_TOPIC_NAME=topic1
+      - APP_KAFKA_SSL_ENABLED=false
+      - APP_KAFKA_BOOTSTRAP_SERVERS=lenses:9092
+      - APP_KAFKA_CONSUMER_POLL_TIMEOUT_MS=100
+      - APP_KAFKA_CONSUMER_NAME=consumer-name-1
+      - APP_KAFKA_CONSUMER_GROUP_ID=group1
+      - APP_KAFKA_CONSUMER_SESSION_TIMEOUT_MS=6000
+      - APP_KAFKA_CONSUMER_AUTO_OFFSET_RESET=earliest
+    ports:
+      - 8889:8888
+    networks:
+      - joiner_net
+
+  producer:
+    image: kafka_producer:v0.0.1
+    depends_on:
+      - lenses
+    links:
+      - lenses
+    environment:
+      - APP_LOG_LEVEL=DEBUG
+      - APP_INFO_PORT=8888
+      - APP_KAFKA_TOPIC_NAME=topic1
+      - APP_KAFKA_SSL_ENABLED=false
+      - APP_KAFKA_BOOTSTRAP_SERVERS=lenses:9092
+      - APP_KAFKA_PRODUCER_IDEMPOTENCE=true
+      - APP_KAFKA_PRODUCER_READ_EVENTS=true
+      - APP_KAFKA_PRODUCER_FLUSH_TIMEOUT_MS=100
+    ports:
+      - 8888:8888
+    networks:
+      - joiner_net
+
+networks:
+  joiner_net:
+    name: joiner_net

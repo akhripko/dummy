@@ -2,7 +2,7 @@ SHELL=/bin/bash
 ROOT_DIR := $(shell pwd)
 #IMAGE_TAG := $(shell git rev-parse --short HEAD)
 #IMAGE_TAG := $(git describe --abbrev=0 --tags)
-IMAGE_TAG := v0.0.2
+IMAGE_TAG := v0.0.1
 IMAGE_NAME := company/srv
 REGISTRY := change-it.dkr.ecr.us-west-2.amazonaws.com
 KAFKA_REGISTER_FOR_KEY=ec059ac5-e303-4232-999e-39abc592fe75
@@ -103,6 +103,8 @@ start_kafka:
 stop_kafka:
 	docker stop kafka
 
+compose_up_kafka:
+	docker-compose up --build lenses
 
 #.PHONY: exec_redis_sh
 #exec_redis_sh:
